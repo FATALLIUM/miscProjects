@@ -1,0 +1,103 @@
+let passwordCheckBox, checkPasswordInfo, genPassBox, listBox, passInfo, passList, genLenBox, generatedPass;
+
+const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const lower = "abcdefghijklmnopqrstuvwxyz";
+const digits = "0123456789";
+const specialChars = "!@#$%^&*()-_=+[]{}|;:,.<>?";
+
+class Password {
+    constructor(password, len) {
+        this.password = password;
+        this.len = len;
+    }
+
+    passwordCheck() {
+        return this.checkChars(upper) && this.checkChars(lower) && this.checkChars(digits) && this.checkChars(specialChars) && this.password.length >= 8;
+    }
+
+    checkChars(string) {
+        for (let i = 0; i < this.password.length; i++) {
+            for (let e = 0; e < string.length; e++) {
+                if (this.password.charAt(i) == string.charAt(e)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}
+
+function initialize() {
+    listBox = document.getElementById("listbox");
+    passInfo = document.getElementById("checkPasswordInfo");
+    genPassBox = document.getElementById("numGen");
+    passwordCheckBox = document.getElementById("userPassword");
+    genLenBox = document.getElementById("passLen");
+
+    passList = [];
+
+    display();
+}
+
+const display = () => {
+    if (passList.length == 0) {
+        listBox.innerHTML = "Nothing here yet.";
+    } else {
+        listBox.innerHTML = "";
+        for (let i = 0; i < passList.length; i++) {
+            listBox.innerHTML += (i > 0 ? "<br />" : "") + i + ": " + passList[i];
+        }
+    }
+}
+
+function generatePassword(numValue, passLen) {
+    let chars = upper + lower + digits + specialChars;
+    numValue = parseInt(numValue);
+    passLen = parseInt(passLen);
+
+    if (isNaN(numValue) || numValue <= 0) {
+        alert("Please enter a valid number of passwords to generate (greater than 0).");
+        return;
+    }
+
+    if (isNaN(passLen) || passLen < 1) {
+        passLen = 8;
+    }
+
+    if (passLen < 8) {
+        passLen = 8;
+    }
+
+    for (let count = 0; count < numValue; count++) {
+        let validPassword = false;
+
+        while (!validPassword) {
+            let tempPassword = '';
+            for (let i = 0; i < passLen; i++) {
+                let rndNum = Math.floor(Math.random() * chars.length);
+                tempPassword += chars[rndNum];
+            }
+
+            let testPassword = new Password(tempPassword, passLen);
+            if (testPassword.passwordCheck()) {
+                passList.push(tempPassword);
+                validPassword = true;
+            }
+        }
+    }
+    display();
+}
+
+function passwordCheckUser(password) {
+    let temp = new Password(password, password.length);
+    if (temp.passwordCheck()) {
+        passInfo.innerHTML = "Your password meets the safety requirements!";
+    } else {
+        passInfo.innerHTML = "Your password does not meet the safety requirements.";
+    }
+}
+
+function resetList() {
+    passList = [];
+    display();
+}

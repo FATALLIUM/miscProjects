@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Password Generator/Checker</title>
+        <style></style>
+        <script>
+            function initialize () {
+                window.location.href = "passwordGenCheck.html";
+        }   
+        </script>
+    </head>
+    <body onload = "initialize();">
+    </body>
+</html>
